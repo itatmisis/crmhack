@@ -1,6 +1,5 @@
 import subprocess as sp
 from io import BytesIO
-from typing import List
 
 from fastapi import FastAPI, Request, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
