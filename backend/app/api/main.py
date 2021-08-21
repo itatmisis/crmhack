@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, File, UploadFile, HTTPException
+from loguru import logger
 
 from ..core.settings import Settings
 
@@ -7,5 +8,15 @@ app = FastAPI(title=Settings().project_name, version=Settings().version, descrip
 
 # Заглушка на /
 @app.get('/')
-def ping():
+async def ping():
     return {'ping': 'pong'}
+
+
+@app.post('/load_wav')
+async def load_wav_res(file: UploadFile = File(...)):
+    logger.info("{} {} {}", 0, file.content_type, file.filename)
+    if file.content_type != "audio/x-wav":
+        raise HTTPException(400, "Wrong content type")
+    # to something
+    pass
+    return "Ok"
