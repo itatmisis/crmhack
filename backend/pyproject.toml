@@ -12,6 +12,7 @@ uvicorn = "^0.15.0"
 loguru = "^0.5.3"
 python-multipart = "^0.0.5"
 vosk = "^0.3.30"
+ujson = "^4.1.0"
 
 [tool.poetry.dev-dependencies]
 
