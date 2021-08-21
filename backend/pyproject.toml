@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "wirer"
+name = "crmhack"
 version = "0.1.0"
 description = ""
 authors = ["TeaDove <peter.ibragimov@gmail.com>"]
@@ -11,6 +11,7 @@ fastapi = "^0.68.0"
 uvicorn = "^0.15.0"
 loguru = "^0.5.3"
 python-multipart = "^0.0.5"
+vosk = "^0.3.30"
 
 [tool.poetry.dev-dependencies]
 
