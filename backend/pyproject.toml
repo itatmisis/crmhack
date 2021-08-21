@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "wirer"
+version = "0.1.0"
+description = ""
+authors = ["TeaDove <peter.ibragimov@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pydantic = {extras = ["dotenv"], version = "^1.8.2"}
+fastapi = "^0.68.0"
+uvicorn = "^0.15.0"
+loguru = "^0.5.3"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
