@@ -46,7 +46,7 @@ async def load_audio_res(request: Request, audio: UploadFile = File(...)):
     - Добавляет тексту запятые, berd_commas
     значениях.
     """
-    p = sp.Popen(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", "-", '-f', 'wav', "-"], stdin=audio.file,
+    p = sp.Popen(["ffmpeg", "-ac", "1", "-hide_banner", "-loglevel", "error", "-i", "-", '-f', 'wav', "-"], stdin=audio.file,
                  stdout=sp.PIPE)
 
     audio_wav = BytesIO(p.stdout.read())
