@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -11,23 +11,18 @@ class Word(BaseModel):
 
 
 class RecognizedText(BaseModel):
-    result: List[Word]
-    text: str
-
-
-# class WordSentiment(BaseModel):
-#     word: str
-#     conf: float
+    result: Optional[List[Word]]
+    text: Optional[str]
 
 
 class Sentiment(BaseModel):
-    predicted_class: str
-    conf: List[float]
-    word_attributions: List[List]
+    predicted_class: Optional[str]
+    conf: Optional[List[float]]
+    word_attributions: Optional[List[List]]
 
 
 class Analysis(BaseModel):
-    noise: float
-    recognized_text: RecognizedText
-    berd_commas: str
-    sentiments: Sentiment
+    noise: Optional[float]
+    recognized_text: Optional[RecognizedText]
+    berd_commas: Optional[str]
+    sentiments: Optional[Sentiment]
