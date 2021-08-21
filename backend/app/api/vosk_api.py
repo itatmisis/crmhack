@@ -11,7 +11,7 @@ import wave
 
 SetLogLevel(-1)
 
-VOSK = Path(os.path.realpath(__file__)).parent.parent / "vosk"
+VOSK = Path(os.path.realpath(__file__)).parent.parent / "data/vosk"
 SAMPLE_RATE = 16000
 
 

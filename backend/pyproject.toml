@@ -8,12 +8,16 @@ authors = ["TeaDove <peter.ibragimov@gmail.com>"]
 python = ">=3.7,<3.10"
 pydantic = {extras = ["dotenv"], version = "^1.8.2"}
 fastapi = "^0.68.0"
+torch = ">=1.1.0"
 uvicorn = "^0.15.0"
 loguru = "^0.5.3"
 python-multipart = "^0.0.5"
 vosk = "^0.3.30"
 ujson = "^4.1.0"
 scipy = "^1.7.1"
+pytorch-pretrained-bert = "0.6.2"
+pymorphy2 = "0.8"
+
 
 [tool.poetry.dev-dependencies]
 
