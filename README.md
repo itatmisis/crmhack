@@ -1,4 +1,21 @@
-## Запуск бекенд сервера
+## Пример
+https://crmhack.itatmisis.ru:9999/docs - пример работающего бекенда
+
+## Описание продукта
+
+## Стек 
+Алгоритмы:
+- [Vosk](https://alphacephei.com/vosk/) - speech to text алгоритм
+Технологии:
+- Python 3.7
+- FastAPI, Uvicorn
+
+## Запуск Бекенд сервера
+Автоматически:
+``` bash
+curl https://raw.githubusercontent.com/itatmisis/crmhack/master/auto_install.sh | sh
+```
+Вручную:
 ``` bash
 git clone https://github.com/itatmisis/crmhack
 cd crmhack/backend
@@ -18,5 +35,7 @@ touch .env # в .env положить настройки,
 # список настроек в /app/core/settings.py
 bash start.sh
 ```
-## Требования
-`python >= 3.7` 
+## Протестирован на
+- OS: Debian GNU/Linux 10 (buster) x86_64
+- Python 3.7
+- Kernel: 4.19.0-17-amd64 
