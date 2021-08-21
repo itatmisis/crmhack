@@ -1,6 +1,4 @@
-import json
 import numpy as np
-from typing import BinaryIO
 
 
 def average_speed(data: dict):
@@ -11,6 +9,3 @@ def average_speed(data: dict):
         for i in range(vowels):
             syllables.append(time / vowels)
     return np.array(syllables).mean()
-
-
-# print(average_speed("speed/peter.json"))
