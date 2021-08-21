@@ -2,6 +2,7 @@ import uvicorn
 
 from .core.settings import Settings
 
+
 if __name__ == "__main__":
     app_name = "app.api.main:app"
     if Settings().ssl_on:

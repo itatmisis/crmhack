@@ -1,4 +1,6 @@
 **/out.log
+**/vosk/*
+!**/vosk/download.sh
 **/poetry.lock
 **/.idea
 # Byte-compiled / optimized / DLL files
