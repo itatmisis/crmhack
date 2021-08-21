@@ -20,12 +20,11 @@ app = FastAPI(title=Settings().project_name, version=Settings().version, descrip
 # FIX_ME: менять в проде allow_origins на локальные!
 app.add_middleware(
     CORSMiddleware,
-    allow_origins="*",
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-REQUESTS_COUNT = -1
 
 
 # Заглушка на /
