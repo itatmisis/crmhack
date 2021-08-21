@@ -1,3 +1,6 @@
+import subprocess as sp
+from io import BytesIO
+
 from fastapi import FastAPI, Request, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
@@ -28,7 +31,7 @@ async def ping():
 
 # TODO сделать переход в одноканальный звук по дефолту
 @app.post('/load_wav')
-async def load_wav_res(audio_wav: UploadFile = File(...)):
+async def load_wav_res(audio_webm: UploadFile = File(...)):
     """
     На вход подавать только wav.
     Анализирует аудиофайл на:
@@ -37,12 +40,14 @@ async def load_wav_res(audio_wav: UploadFile = File(...)):
     - Добавляет тексту запятые, berd_commas
     значениях.
     """
-    if audio_wav.content_type != "audio/x-wav":
-        raise HTTPException(400, "Wrong content type")
+    p = sp.Popen(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", "-", '-f', 'wav', "-"], stdin=audio_webm.file,
+                 stdout=sp.PIPE)
 
-    recognized_text = ujson.loads(speech_to_text(audio_wav.file))
-    audio_wav.file.seek(0)
-    noise = rate_noise(audio_wav.file)
+    audio_wav = BytesIO(p.stdout.read())
+
+    recognized_text = ujson.loads(speech_to_text(audio_wav))
+    audio_wav.seek(0)
+    noise = rate_noise(audio_wav)
     berd_commas = berd_predict([recognized_text['text']])
 
     to_return = {"noise": noise, "recognized_text": recognized_text, 'berd_commas': berd_commas}
