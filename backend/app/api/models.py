@@ -3,7 +3,7 @@ from typing import List
 from pydantic import BaseModel
 
 
-class PartialResult(BaseModel):
+class Word(BaseModel):
     conf: float
     end: float
     start: float
@@ -11,11 +11,23 @@ class PartialResult(BaseModel):
 
 
 class RecognizedText(BaseModel):
-    result: List[PartialResult]
+    result: List[Word]
     text: str
+
+
+# class WordSentiment(BaseModel):
+#     word: str
+#     conf: float
+
+
+class Sentiment(BaseModel):
+    predicted_class: str
+    conf: List[float]
+    word_attributions: List[List]
 
 
 class Analysis(BaseModel):
     noise: float
     recognized_text: RecognizedText
     berd_commas: str
+    sentiments: Sentiment

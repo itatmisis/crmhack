@@ -17,6 +17,8 @@ ujson = "^4.1.0"
 scipy = "^1.7.1"
 pytorch-pretrained-bert = "0.6.2"
 pymorphy2 = "0.8"
+transformers = "^4.9.2"
+transformers-interpret = "^0.5.2"
 
 
 [tool.poetry.dev-dependencies]

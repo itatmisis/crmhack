@@ -11,7 +11,9 @@ from pydantic import BaseModel
 from .vosk_api import speech_to_text
 from .noise import rate_noise
 from .bert_pred import berd_predict
+from .bert_sentiment import get_sentiment
 from .models import Analysis
+
 from ..core.settings import Settings
 
 
@@ -24,6 +26,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+REQUESTS_COUNT = -1
 
 
 # Заглушка на /
@@ -34,7 +37,8 @@ async def ping():
 
 # TODO сделать переход в одноканальный звук по дефолту
 @app.post('/load_audio', response_model=Analysis)
-async def load_audio_res(audio_webm: UploadFile = File(...)):
+async def load_audio_res(request: Request, audio: UploadFile = File(...)):
+    logger.info("Request from: {}", request.client.host)
     """
     На вход подавать только wav.
     Анализирует аудиофайл на:
@@ -43,7 +47,7 @@ async def load_audio_res(audio_webm: UploadFile = File(...)):
     - Добавляет тексту запятые, berd_commas
     значениях.
     """
-    p = sp.Popen(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", "-", '-f', 'wav', "-"], stdin=audio_webm.file,
+    p = sp.Popen(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", "-", '-f', 'wav', "-"], stdin=audio.file,
                  stdout=sp.PIPE)
 
     audio_wav = BytesIO(p.stdout.read())
@@ -51,8 +55,10 @@ async def load_audio_res(audio_webm: UploadFile = File(...)):
     recognized_text = ujson.loads(speech_to_text(audio_wav))
     audio_wav.seek(0)
     noise = rate_noise(audio_wav)
-    berd_commas = berd_predict([recognized_text['text']])
+    berd_commas = berd_predict([recognized_text['text']])[0]
+    sentiments = get_sentiment(berd_commas)
 
-    to_return = {"noise": noise, "recognized_text": recognized_text, 'berd_commas': berd_commas}
-    logger.info("Request Done")
+    to_return = {"noise": noise, "recognized_text": recognized_text, 'berd_commas': berd_commas,
+                 "sentiments": sentiments}
+    logger.info("Request done from: {}", request.client.host)
     return to_return
