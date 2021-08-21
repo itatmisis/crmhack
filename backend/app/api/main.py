@@ -10,7 +10,8 @@ from pydantic import BaseModel
 
 from .vosk_api import speech_to_text
 from .noise import rate_noise
-# from .bert_pred import berd_predict
+from .bert_pred import berd_predict
+from .models import Analysis
 from ..core.settings import Settings
 
 
@@ -29,24 +30,6 @@ app.add_middleware(
 @app.get('/')
 async def ping():
     return {'ping': 'pong'}
-
-
-class PartialResult(BaseModel):
-    conf: float
-    end: float
-    start: float
-    word: str
-
-
-class RecognizedText(BaseModel):
-    result: List[PartialResult]
-    text: str
-
-
-class Analysis(BaseModel):
-    noise: float
-    recognized_text: RecognizedText
-    berd_commas: str
 
 
 # TODO сделать переход в одноканальный звук по дефолту
@@ -68,8 +51,8 @@ async def load_audio_res(audio_webm: UploadFile = File(...)):
     recognized_text = ujson.loads(speech_to_text(audio_wav))
     audio_wav.seek(0)
     noise = rate_noise(audio_wav)
-    # berd_commas = berd_predict([recognized_text['text']])
+    berd_commas = berd_predict([recognized_text['text']])
 
-    to_return = {"noise": noise, "recognized_text": recognized_text, }#'berd_commas': berd_commas}
+    to_return = {"noise": noise, "recognized_text": recognized_text, 'berd_commas': berd_commas}
     logger.info("Request Done")
     return to_return
