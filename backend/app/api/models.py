@@ -23,6 +23,7 @@ class Sentiment(BaseModel):
 
 class Analysis(BaseModel):
     noise: Optional[float]
+    text_speed: Optional[float]
     recognized_text: Optional[RecognizedText]
     berd_commas: Optional[str]
     sentiments: Optional[Sentiment]
