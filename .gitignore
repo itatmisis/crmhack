@@ -1,3 +1,5 @@
+**/bert_punctuation.tar.gz
+**/vocab.txt
 **/out.log
 **/vosk/*
 !**/vosk/download.sh

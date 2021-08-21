@@ -11,7 +11,7 @@ https://crmhack.itatmisis.ru:9999/docs - пример работающего б�
 
 ## Стек 
 Алгоритмы:
-- [Vosk](https://alphacephei.com/vosk/) - speech to text алгоритм
+- [Vosk](https://alphacephei.com/vosk/) - speech to text алгоритм  
 Технологии:
 - Python 3.7
 - FastAPI, Uvicorn
