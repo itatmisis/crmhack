@@ -32,6 +32,7 @@ class Politness(BaseModel):
     friendly: float
     clear: float
     formal: float
+    average: float
 
 
 class Noise(BaseModel):
