@@ -90,14 +90,14 @@ class DashboardPage extends StatelessWidget {
   }
 
   Widget _buildSecondRow(BuildContext context) {
-    var benevolence = (this.processedAudio.politness.positive +
-            this.processedAudio.politness.friendly) /
+    var benevolence = (this.processedAudio.politeness.positive +
+            this.processedAudio.politeness.friendly) /
         2;
     return Wrap(
       alignment: WrapAlignment.spaceBetween,
       children: [
         _buildCircleDiagramMetric(context, "Позитивная вежливость в разговоре",
-            this.processedAudio.politness.positive),
+            this.processedAudio.politeness.positive),
         _buildChartMetric(context, "Эмоциональная динамика",
             "Статистика за разговор", this.processedAudio.bertParted),
         _buildCircleDiagramMetric(
@@ -170,16 +170,16 @@ class DashboardPage extends StatelessWidget {
                 context,
                 Icons.format_italic_rounded,
                 "Формальность в разговоре",
-                doubleToPercent(this.processedAudio.politness.formal),
+                doubleToPercent(this.processedAudio.politeness.formal),
                 ""),
           ],
         ),
         _buildCircleDiagramMetric(context, "Общая оценка разговора",
-            this.processedAudio.politness.average),
+            this.processedAudio.politeness.average),
         _buildCircleDiagramMetric(context, "Общая вежливость",
-            this.processedAudio.politness.friendly),
+            this.processedAudio.politeness.friendly),
         _buildCircleDiagramMetric(context, "Чистота речи в разговоре",
-            this.processedAudio.politness.clear),
+            this.processedAudio.politeness.clear),
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
