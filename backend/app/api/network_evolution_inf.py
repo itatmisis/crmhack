@@ -128,8 +128,15 @@ def get_graph(edge_counter, ec_dict):
     for i in range(len(edge_counter)):
         g.add_edge(list(edge_counter)[i][0], list(edge_counter)[i][1], weight=weights[i])
 
+    #   try:
+    #       g.remove_edge(str(7), str(7))
+    #       g.remove_edge(str(8), str(8))
+    #   except:
+    #       pass
+
     nx.draw_spring(g, with_labels=True)
     to_pdot = nx.drawing.nx_pydot.to_pydot
+
     pdot = to_pdot(g)
     shapes = ['box', 'polygon', 'ellipse', 'oval', 'circle', 'egg', 'triangle', 'exagon', 'star', ]
     colors = ['blue', 'black', 'red', '#db8625', 'green', 'gray', 'cyan', '#ed125b']
@@ -137,16 +144,27 @@ def get_graph(edge_counter, ec_dict):
 
     g_c = g.copy()
     g_c.remove_node(8)
+
+    g_f = g.copy()
+    g_f.remove_node(7)
+
     optimal_path = nx.dijkstra_path(g_c, 0, 7)
-    # print(optimal_path)
+    optimal_fail_path = nx.dijkstra_path(g_f, 0, 8)
+    print(optimal_path)
 
     # for i, edge in enumerate(pdot.get_edges()):
     # print(edge)
     for i, edge in enumerate(pdot.get_edges()):
         edge.set_penwidth(1.5)
+        edge.set_weight(True)
+
+    for i in range(len(optimal_fail_path) - 1):
+        print(pdot.get_edge(str(optimal_fail_path[i]), str(optimal_fail_path[i + 1])))
+        pdot.get_edge(str(optimal_fail_path[i]), str(optimal_fail_path[i + 1]))[0].set_penwidth(6)
+        pdot.get_edge(str(optimal_fail_path[i]), str(optimal_fail_path[i + 1]))[0].set_color("red")
 
     for i in range(len(optimal_path) - 1):
-        # print(pdot.get_edge(str(optimal_path[i]), str(optimal_path[i + 1])))
+        print(pdot.get_edge(str(optimal_path[i]), str(optimal_path[i + 1])))
         pdot.get_edge(str(optimal_path[i]), str(optimal_path[i + 1]))[0].set_penwidth(6)
         pdot.get_edge(str(optimal_path[i]), str(optimal_path[i + 1]))[0].set_color("blue")
 
@@ -161,15 +179,19 @@ def get_graph(edge_counter, ec_dict):
 
         if (i == 7):
             node.set_label("Success")
+            node.set_fillcolor("green")
 
         if (i == 8):
             node.set_label("Fail")
+            node.set_fillcolor("red")
 
         if (i < 9):
             node.set_fontsize(20)
             node.set_fillcolor("#877df5")
             node.set_style(styles[0])
 
+    pdot.get_node('7')[0].set_fillcolor("green")
+    pdot.get_node('8')[0].set_fillcolor("red")
     png_str = pdot.create_png(prog='dot')
     sio = BytesIO()
     sio.write(png_str)
@@ -177,7 +199,6 @@ def get_graph(edge_counter, ec_dict):
     img = mpimg.imread(sio)
 
     return img
-
 
 def generate_gif():
     graphs = [get_graph(list(edge_counter)[0:i], edge_counter) for i in
@@ -189,9 +210,10 @@ def generate_gif():
         img_obj = img
         ax.imshow(img_obj)  # plotting
         camera.snap()
-    animation = camera.animate(interval=1500)
+    animation = camera.animate(interval=3000)
 
     name = get_rand_name()
     animation.save(name)
 
     return name
+
