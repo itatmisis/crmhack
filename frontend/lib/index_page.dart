@@ -18,6 +18,7 @@
 
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
 import 'package:frontend/api_entities.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
@@ -33,6 +34,11 @@ import 'audio_util/temp_file.dart';
 
 import 'audio_util/demo_active_codec.dart';
 import 'audio_util/recorder_state.dart';
+import 'package:file_picker/file_picker.dart';
+
+var teamLogoImage = Image(image: AssetImage('assets/team_logo.png'));
+
+const myFavoriteWhite = Color.fromARGB(1, 250, 250, 250);
 
 class MainBody extends StatefulWidget {
   const MainBody({
@@ -48,6 +54,7 @@ class _MainBodyState extends State<MainBody> {
   bool recording = false;
 
   String? recordingFile;
+  Uint8List? fileBytes;
   late Track track;
 
   @override
@@ -112,14 +119,41 @@ class _MainBodyState extends State<MainBody> {
               color: Colors.white,
             );
           } else {
-            return Column(
+            return ListView(
               children: <Widget>[
-                _buildRecorder(track),
-                ElevatedButton(
-                  child: const Text('Go to dashboard page'),
-                  onPressed: _getTrackPath() != null ? _onProcessRecord : null,
+                SizedBox(height: 100),
+                SizedBox(
+                  width: 500,
+                  child: teamLogoImage,
                 ),
-                _buildQR(),
+                SizedBox(height: 50),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        _buildRecorder(track),
+                        RaisedButton(
+                          color: favoriteBlueColor,
+                          child: const Text("Process audio"),
+                          onPressed:
+                              _getTrackPath() != null || fileBytes != null
+                                  ? _onProcessRecord
+                                  : null,
+                        ),
+                        SizedBox(width: 20, height: 20),
+                        RaisedButton.icon(
+                          icon: Icon(Icons.attach_file),
+                          color: favoriteBlueColor,
+                          label: const Text("Pick .webm"),
+                          onPressed: _onPickFile,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 50),
+                    _buildQR(),
+                  ],
+                ),
               ],
             );
           }
@@ -132,12 +166,14 @@ class _MainBodyState extends State<MainBody> {
         padding: const EdgeInsets.all(8.0),
         child: RecorderPlaybackController(
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (recording)
                 SizedBox(
                   width: 400,
                   child: SoundRecorderUI(
                     track,
+                    backgroundColor: myFavoriteWhite,
                     showTrashCan: false,
                     onStopped: (media) {
                       setState(() {
@@ -154,6 +190,7 @@ class _MainBodyState extends State<MainBody> {
                   width: 400,
                   child: SoundPlayerUI.fromTrack(
                     track,
+                    backgroundColor: myFavoriteWhite,
                     enabled: hasTrack,
                     showTitle: true,
                     audioFocus: AudioFocus.requestFocusAndDuckOthers,
@@ -161,8 +198,11 @@ class _MainBodyState extends State<MainBody> {
                 ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
+                child: RaisedButton(
+                  textTheme: ButtonTextTheme.primary,
+                  color: favoriteBlueColor,
                   child: Icon(Icons.mic),
+                  shape: CircleBorder(),
                   onPressed: () {
                     setState(() {
                       recording = true;
@@ -176,7 +216,7 @@ class _MainBodyState extends State<MainBody> {
   }
 
   Widget _buildQR() {
-    final double size = 250;
+    final double size = 300;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
       child: Center(
@@ -193,6 +233,18 @@ class _MainBodyState extends State<MainBody> {
     );
   }
 
+  _onPickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      Uint8List newFileBytes = result.files.first.bytes!;
+      String fileName = result.files.first.name;
+      setState(() {
+        fileBytes = newFileBytes;
+      });
+    }
+  }
+
   String? _getTrackPath() {
     var trackPath = track.trackPath!;
     trackPath = getRecordURL(trackPath);
@@ -204,7 +256,7 @@ class _MainBodyState extends State<MainBody> {
 
   _onProcessRecord() async {
     var trackPath = _getTrackPath();
-    if (trackPath == null) {
+    if (trackPath == null && fileBytes == null) {
       Scaffold.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.red,
         content: Text("null recorded audio"),
@@ -212,11 +264,13 @@ class _MainBodyState extends State<MainBody> {
       return;
     }
     Uint8List data;
-    if (kIsWeb) {
-      final result = await http.get(Uri.parse(trackPath));
+    if (fileBytes != null) {
+      data = fileBytes!;
+    } else if (kIsWeb) {
+      final result = await http.get(Uri.parse(trackPath!));
       data = result.bodyBytes;
     } else {
-      var f = File(trackPath);
+      var f = File(trackPath!);
       data = await f.readAsBytes();
     }
 
