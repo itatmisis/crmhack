@@ -44,6 +44,7 @@ class MainBody extends StatefulWidget {
 
 class _MainBodyState extends State<MainBody> {
   bool initialized = false;
+  bool recording = false;
 
   String? recordingFile;
   late Track track;
@@ -115,7 +116,7 @@ class _MainBodyState extends State<MainBody> {
                 _buildRecorder(track),
                 ElevatedButton(
                   child: const Text('Go to dashboard page'),
-                  onPressed: _onProcessRecord,
+                  onPressed: _getTrackPath() != null ? _onProcessRecord : null,
                 ),
                 _buildQR(),
               ],
@@ -125,19 +126,48 @@ class _MainBodyState extends State<MainBody> {
   }
 
   Widget _buildRecorder(Track track) {
+    var hasTrack = _getTrackPath() != null;
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: RecorderPlaybackController(
-          child: Column(
+          child: Row(
             children: [
-              Left('Recorder'),
-              SoundRecorderUI(track, showTrashCan: false),
-              Left('Recording Playback'),
-              SoundPlayerUI.fromTrack(
-                track,
-                enabled: false,
-                showTitle: true,
-                audioFocus: AudioFocus.requestFocusAndDuckOthers,
+              if (recording)
+                SizedBox(
+                  width: 400,
+                  child: SoundRecorderUI(
+                    track,
+                    showTrashCan: false,
+                    onStopped: (media) {
+                      setState(() {
+                        recording = false;
+                      });
+                    },
+                    pausedTitle: "Paused",
+                    recordingTitle: "Recording",
+                    stoppedTitle: "Stopped",
+                  ),
+                ),
+              if (!recording)
+                SizedBox(
+                  width: 400,
+                  child: SoundPlayerUI.fromTrack(
+                    track,
+                    enabled: hasTrack,
+                    showTitle: true,
+                    audioFocus: AudioFocus.requestFocusAndDuckOthers,
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  child: Icon(Icons.mic),
+                  onPressed: () {
+                    setState(() {
+                      recording = true;
+                    });
+                  },
+                ),
               ),
             ],
           ),
@@ -162,12 +192,21 @@ class _MainBodyState extends State<MainBody> {
     );
   }
 
-  _onProcessRecord() async {
+  String? _getTrackPath() {
     var trackPath = track.trackPath!;
+    // TODO: fix build for android
     if (kIsWeb) {
       trackPath = getRecordURL(trackPath);
     }
     if (trackPath == null || trackPath == "") {
+      return null;
+    }
+    return trackPath;
+  }
+
+  _onProcessRecord() async {
+    var trackPath = _getTrackPath();
+    if (trackPath == null) {
       Scaffold.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.red,
         content: Text("null recorded audio"),
@@ -227,22 +266,6 @@ class _MainBodyState extends State<MainBody> {
             ],
           );
         });
-  }
-}
-
-class Left extends StatelessWidget {
-  final String label;
-
-  Left(this.label);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0, bottom: 4, left: 8),
-      child: Container(
-          alignment: Alignment.centerLeft,
-          child: Text(label, style: TextStyle(fontWeight: FontWeight.bold))),
-    );
   }
 }
 
