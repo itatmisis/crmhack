@@ -53,7 +53,7 @@ class DashboardPage extends StatelessWidget {
       alignment: WrapAlignment.spaceBetween,
       // TODO: use correct icons
       children: [
-        _buildSimpleMetric(context, Icons.access_time, "Темп речи", "Быстро",
+        _buildSimpleMetric(context, Icons.access_time, "Темп речи", this.processedAudio.textSpeed.speedClass,
             "Необходимо говорить медленнее"),
         _buildSimpleMetric(context, Icons.handyman_sharp, "Общая вежливость",
             "75%", "Обратите внимание на тон речи"),

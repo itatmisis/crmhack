@@ -9,6 +9,7 @@ part of 'api_entities.dart';
 ProcessAudioResponse _$ProcessAudioResponseFromJson(Map<String, dynamic> json) {
   return ProcessAudioResponse(
     (json['noise'] as num).toDouble(),
+    TextSpeed.fromJson(json['text_speed'] as Map<String, dynamic>),
     RecognizedText.fromJson(json['recognized_text'] as Map<String, dynamic>),
     json['berd_commas'] as String,
     Sentiments.fromJson(json['sentiments'] as Map<String, dynamic>),
@@ -19,6 +20,7 @@ Map<String, dynamic> _$ProcessAudioResponseToJson(
         ProcessAudioResponse instance) =>
     <String, dynamic>{
       'noise': instance.noise,
+      'text_speed': instance.textSpeed,
       'recognized_text': instance.recognizedText,
       'berd_commas': instance.berdCommas,
       'sentiments': instance.sentiments,
@@ -68,4 +70,16 @@ Map<String, dynamic> _$SentimentsToJson(Sentiments instance) =>
     <String, dynamic>{
       'predicted_class': instance.predictedClass,
       'conf': instance.conf,
+    };
+
+TextSpeed _$TextSpeedFromJson(Map<String, dynamic> json) {
+  return TextSpeed(
+    (json['mean'] as num).toDouble(),
+    json['speed_class'] as String,
+  );
+}
+
+Map<String, dynamic> _$TextSpeedToJson(TextSpeed instance) => <String, dynamic>{
+      'mean': instance.mean,
+      'speed_class': instance.speedClass,
     };
