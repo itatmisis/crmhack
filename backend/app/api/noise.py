@@ -37,4 +37,13 @@ def rate_noise(wav_loc: BinaryIO):
     rate, data = wavfile.read(wav_loc)
 
     new_list = data_to_analyse(data)
-    return bin_search(new_list, 0.7) / bin_search(new_list, 0.05)
+    noise = bin_search(new_list, 0.7) / bin_search(new_list, 0.05)
+    if noise < 0.1:
+        comment = "Идеально"
+    elif noise < 0.3:
+        comment = "Удовлетворительно"
+    elif noise < 0.5:
+        comment = "Обстановка зашумлена, необходимо уменьшить уровень шума"
+    else:
+        comment = "Обстановка очень зашемлена, нуобходимо сильно уменьшить уровень шума"
+    return {"noise_level": noise, "comment": comment}

@@ -23,11 +23,16 @@ class Sentiment(BaseModel):
 
 class TextSpeed(BaseModel):
     speed_class: str
+    comment: str
     mean: float
 
 
+class Noise(BaseModel):
+    noise_level: float
+    comment: str
+
 class Analysis(BaseModel):
-    noise: Optional[float]
+    noise: Optional[Noise]
     text_speed: Optional[TextSpeed]
     recognized_text: Optional[RecognizedText]
     berd_commas: Optional[str]
