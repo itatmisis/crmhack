@@ -220,7 +220,9 @@ class _MainBodyState extends State<MainBody> {
       data = await f.readAsBytes();
     }
 
-    showDialog(
+    ProcessAudioResponse? globalResponse;
+
+    var isOk = await showDialog<bool>(
         context: context,
         builder: (context) {
           return SimpleDialog(
@@ -235,12 +237,8 @@ class _MainBodyState extends State<MainBody> {
                         future: processAudio(data.toList()),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      DashboardPage(snapshot.data!)),
-                            );
+                            globalResponse = snapshot.data!;
+                            Navigator.of(context).pop(true);
                             return Text("");
                           } else if (snapshot.hasError) {
                             return Padding(
@@ -270,5 +268,12 @@ class _MainBodyState extends State<MainBody> {
             ],
           );
         });
+
+    if (isOk != null && isOk && globalResponse != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardPage(globalResponse!)),
+      );
+    }
   }
 }
