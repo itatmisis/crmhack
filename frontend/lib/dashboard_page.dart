@@ -173,7 +173,8 @@ class DashboardPage extends StatelessWidget {
           children: [
             _buildLineDiagramMetric(
                 context, "Конструктивность в разговоре", 0.4),
-            _buildLineDiagramMetric(context, "Формальность в разговоре", 0.8),
+            _buildLineDiagramMetric(
+                context, "Формальность в разговоре       ", 0.8),
           ],
         ),
         _buildCircleDiagramMetric(context, "Чистота речи в разговоре", 0.2),
