@@ -4,6 +4,7 @@ import 'dart:async';
 import 'api_entities.dart';
 
 const serverAddress = "https://crmhack.itatmisis.ru:9999";
+const graphGifUrl = serverAddress + "/graph_generate_gif";
 
 Future<ProcessAudioResponse> processAudio(List<int> audio) async {
   var request =

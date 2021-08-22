@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/api_entities.dart';
+import 'package:frontend/graph_page.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 const favoriteBlueColor = Color.fromRGBO(75, 123, 236, 1);
@@ -14,6 +15,25 @@ class DashboardPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Отчет по аудиозаписи"),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton.icon(
+                icon: Icon(Icons.open_in_new),
+                label: Text('Open graph page'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GraphPage(),
+                      ));
+                },
+              ),
+              SizedBox(width: 100),
+            ],
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
