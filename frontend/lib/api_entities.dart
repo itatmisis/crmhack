@@ -5,13 +5,14 @@ part 'api_entities.g.dart';
 @JsonSerializable(fieldRename: FieldRename.snake)
 class ProcessAudioResponse {
   final Noise noise;
+  final Politness politness;
   final TextSpeed textSpeed;
   final RecognizedText recognizedText;
   final String berdCommas;
   final Sentiments sentiments;
 
-  ProcessAudioResponse(this.noise, this.textSpeed, this.recognizedText,
-      this.berdCommas, this.sentiments);
+  ProcessAudioResponse(this.noise, this.politness, this.textSpeed,
+      this.recognizedText, this.berdCommas, this.sentiments);
 
   factory ProcessAudioResponse.fromJson(Map<String, dynamic> json) =>
       _$ProcessAudioResponseFromJson(json);
@@ -73,4 +74,19 @@ class Noise {
   Noise(this.noiseLevel, this.comment);
 
   factory Noise.fromJson(Map<String, dynamic> json) => _$NoiseFromJson(json);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class Politness {
+  final double positive;
+  final double friendly;
+  final double clear;
+  final double formal;
+  final double average;
+
+  Politness(
+      this.positive, this.friendly, this.clear, this.formal, this.average);
+
+  factory Politness.fromJson(Map<String, dynamic> json) =>
+      _$PolitnessFromJson(json);
 }

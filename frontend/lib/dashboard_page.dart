@@ -90,15 +90,18 @@ class DashboardPage extends StatelessWidget {
   }
 
   Widget _buildSecondRow(BuildContext context) {
+    var benevolence = (this.processedAudio.politness.positive +
+            this.processedAudio.politness.friendly) /
+        2;
     return Wrap(
       alignment: WrapAlignment.spaceBetween,
       children: [
-        _buildCircleDiagramMetric(
-            context, "Позитивная вежливость в разговоре", 0.9),
+        _buildCircleDiagramMetric(context, "Позитивная вежливость в разговоре",
+            this.processedAudio.politness.positive),
         _buildChartMetric(
             context, "Эмоциональная динамика", "Статистика за разговор"),
         _buildCircleDiagramMetric(
-            context, "Доброжелательность в разговоре", 0.5),
+            context, "Доброжелательность в разговоре", benevolence),
       ],
     );
   }
@@ -110,7 +113,7 @@ class DashboardPage extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(13.0)),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 15, 0, 0),
+        padding: const EdgeInsets.all(10),
         child: SizedBox(
           width: 200,
           child: Column(
@@ -120,21 +123,18 @@ class DashboardPage extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               Container(
-                height: 210,
+                height: 200,
                 child: SfCircularChart(
                     annotations: <CircularChartAnnotation>[
                       CircularChartAnnotation(
                           widget: Container(
                               child: Text(doubleToPercent(percent),
                                   style: TextStyle(
-                                      color: favoriteBlueColor, fontSize: 35))))
+                                      color: favoriteBlueColor, fontSize: 30))))
                     ],
                     title: ChartTitle(text: ''),
                     series: <DoughnutSeries<_PieData, String>>[
                       DoughnutSeries<_PieData, String>(
-                          radius: "93%",
-                          // explode: true,
-                          // explodeOffset: '50%',
                           dataSource: <_PieData>[
                             _PieData("asd", percent * 100, ""),
                             _PieData("asd", (1 - percent) * 100, ""),
@@ -163,16 +163,20 @@ class DashboardPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            _buildLineDiagramMetric(
-                context, "Общая вежливость               ", 0.75),
+            _buildLineDiagramMetric(context, "Общая вежливость               ",
+                this.processedAudio.politness.friendly),
             SizedBox(height: 5),
-            _buildLineDiagramMetric(context, "Формальность в разговоре", 0.8),
+            _buildLineDiagramMetric(context, "Формальность в разговоре",
+                this.processedAudio.politness.formal),
           ],
         ),
-        _buildCircleDiagramMetric(context, "Общая оценка разговора", 0.8),
+        _buildCircleDiagramMetric(context, "Общая оценка разговора",
+            this.processedAudio.politness.average),
+        // TODO
         _buildCircleDiagramMetric(
             context, "Правильная интонация в разговоре", 0.95),
-        _buildCircleDiagramMetric(context, "Чистота речи в разговоре", 0.2),
+        _buildCircleDiagramMetric(context, "Чистота речи в разговоре",
+            this.processedAudio.politness.clear),
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,11 +249,11 @@ class DashboardPage extends StatelessWidget {
           Container(
             height: 300,
             child: SfCartesianChart(
-              legend: Legend(isVisible: true, opacity: 0.7),
+              legend: Legend(
+                  isVisible: true, opacity: 0.7, position: LegendPosition.top),
               title: ChartTitle(text: ''),
               plotAreaBorderWidth: 0,
               primaryXAxis: NumericAxis(
-                title: AxisTitle(text: "Время"),
                 labelFormat: '{value}с',
               ),
               series: getMockChartData(),
