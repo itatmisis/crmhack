@@ -22,7 +22,7 @@ def get_rand_name():
     return str(to_return)
 
 empirical = pickle.load(open(DATA / 'empirical.pkl', 'rb'))
-etalon = pickle.load(open(DATA / 'empirical.pkl', 'rb'))
+etalon = pickle.load(open(DATA / 'etalon.pkl', 'rb'))
 
 etalon_list = [[0, 1],
                [1, 2],
