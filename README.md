@@ -19,7 +19,8 @@
 - [GCN](https://github.com/tkipf/gcn) - графовая нейронная сеть, дообученная на предсказание дополнительных связей в эмпирическом графе стратегий продаж. 
 Технологии:
 - Python 3.7
-- FastAPI, Uvicorn
+- FastAPI, Uvicorn  
+  Фронтенд:
 - Flutter 2.2
 - StellarGraph, PyTorch, Gensim.
 

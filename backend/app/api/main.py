@@ -58,8 +58,6 @@ async def load_audio_res(request: Request, audio: UploadFile = File(...)):
     audio_wav.seek(0)
 
     text_speed = average_speed(recognized_text)
-
-
     noise = rate_noise(audio_wav)
     berd_commas = berd_predict([recognized_text['text']])[0]
     sentiments = get_sentiment(berd_commas)
