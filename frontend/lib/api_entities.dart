@@ -8,11 +8,12 @@ class ProcessAudioResponse {
   final Politness politness;
   final TextSpeed textSpeed;
   final RecognizedText recognizedText;
-  final String berdCommas;
+  final String bertCommas;
   final Sentiments sentiments;
+  final List<double> bertParted;
 
   ProcessAudioResponse(this.noise, this.politness, this.textSpeed,
-      this.recognizedText, this.berdCommas, this.sentiments);
+      this.recognizedText, this.bertCommas, this.sentiments, this.bertParted);
 
   factory ProcessAudioResponse.fromJson(Map<String, dynamic> json) =>
       _$ProcessAudioResponseFromJson(json);

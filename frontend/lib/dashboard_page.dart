@@ -98,8 +98,8 @@ class DashboardPage extends StatelessWidget {
       children: [
         _buildCircleDiagramMetric(context, "Позитивная вежливость в разговоре",
             this.processedAudio.politness.positive),
-        _buildChartMetric(
-            context, "Эмоциональная динамика", "Статистика за разговор"),
+        _buildChartMetric(context, "Эмоциональная динамика",
+            "Статистика за разговор", this.processedAudio.bertParted),
         _buildCircleDiagramMetric(
             context, "Доброжелательность в разговоре", benevolence),
       ],
@@ -163,18 +163,21 @@ class DashboardPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            _buildLineDiagramMetric(context, "Общая вежливость               ",
-                this.processedAudio.politness.friendly),
-            SizedBox(height: 5),
-            _buildLineDiagramMetric(context, "Формальность в разговоре",
-                this.processedAudio.politness.formal),
+            _buildSimpleMetric(context, Icons.mood, "Настроение разговора",
+                this.processedAudio.sentiments.predictedClass, ""),
+            SizedBox(height: 15),
+            _buildSimpleMetric(
+                context,
+                Icons.format_italic_rounded,
+                "Формальность в разговоре",
+                doubleToPercent(this.processedAudio.politness.formal),
+                ""),
           ],
         ),
         _buildCircleDiagramMetric(context, "Общая оценка разговора",
             this.processedAudio.politness.average),
-        // TODO
-        _buildCircleDiagramMetric(
-            context, "Правильная интонация в разговоре", 0.95),
+        _buildCircleDiagramMetric(context, "Общая вежливость",
+            this.processedAudio.politness.friendly),
         _buildCircleDiagramMetric(context, "Чистота речи в разговоре",
             this.processedAudio.politness.clear),
         Column(
@@ -229,11 +232,11 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  Widget _buildChartMetric(BuildContext context, String title, String body) {
+  Widget _buildChartMetric(
+      BuildContext context, String title, String body, List<double> data) {
     return SizedBox(
       width: 750,
       child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
@@ -251,12 +254,11 @@ class DashboardPage extends StatelessWidget {
             child: SfCartesianChart(
               legend: Legend(
                   isVisible: true, opacity: 0.7, position: LegendPosition.top),
-              title: ChartTitle(text: ''),
               plotAreaBorderWidth: 0,
               primaryXAxis: NumericAxis(
-                labelFormat: '{value}с',
+                labelFormat: '{value}',
               ),
-              series: getMockChartData(),
+              series: convertChartData(data),
               tooltipBehavior: TooltipBehavior(enable: true),
             ),
           )
@@ -265,25 +267,13 @@ class DashboardPage extends StatelessWidget {
     );
   }
 
-  static List<LineSeries<_ChartData, num>> getMockChartData() {
-    final List<_ChartData> chartData = <_ChartData>[
-      _ChartData(10, 3),
-      _ChartData(15, 2),
-      _ChartData(20, 1),
-      _ChartData(25, 3),
-      _ChartData(30, 3),
-      _ChartData(35, 2),
-      _ChartData(40, 4),
-      _ChartData(45, 2),
-      _ChartData(50, 1),
-    ];
-    return <LineSeries<_ChartData, num>>[
-      LineSeries<_ChartData, num>(
-        // enableToolTip: isTooltipVisible,
-        dataSource: chartData,
-        xValueMapper: (_ChartData data, _) => data.second,
-        yValueMapper: (_ChartData data, _) => data.count,
-        name: "Важный параметр",
+  static List<LineSeries<double, num>> convertChartData(List<double> data) {
+    return <LineSeries<double, num>>[
+      LineSeries<double, num>(
+        dataSource: data,
+        xValueMapper: (double data, int index) => index,
+        yValueMapper: (double data, int index) => data,
+        name: "Эмоциональность диалога",
       ),
     ];
   }
@@ -299,11 +289,4 @@ class _PieData {
   final String xData;
   final num yData;
   final String text;
-}
-
-class _ChartData {
-  _ChartData(this.second, this.count);
-
-  final double second;
-  final double count;
 }

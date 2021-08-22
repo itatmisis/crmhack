@@ -12,8 +12,11 @@ ProcessAudioResponse _$ProcessAudioResponseFromJson(Map<String, dynamic> json) {
     Politness.fromJson(json['politness'] as Map<String, dynamic>),
     TextSpeed.fromJson(json['text_speed'] as Map<String, dynamic>),
     RecognizedText.fromJson(json['recognized_text'] as Map<String, dynamic>),
-    json['berd_commas'] as String,
+    json['bert_commas'] as String,
     Sentiments.fromJson(json['sentiments'] as Map<String, dynamic>),
+    (json['bert_parted'] as List<dynamic>)
+        .map((e) => (e as num).toDouble())
+        .toList(),
   );
 }
 
@@ -24,8 +27,9 @@ Map<String, dynamic> _$ProcessAudioResponseToJson(
       'politness': instance.politness,
       'text_speed': instance.textSpeed,
       'recognized_text': instance.recognizedText,
-      'berd_commas': instance.berdCommas,
+      'bert_commas': instance.bertCommas,
       'sentiments': instance.sentiments,
+      'bert_parted': instance.bertParted,
     };
 
 RecognizedText _$RecognizedTextFromJson(Map<String, dynamic> json) {
