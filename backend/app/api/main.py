@@ -1,5 +1,7 @@
 import subprocess as sp
 from io import BytesIO
+from pathlib import Path
+import os
 
 from fastapi import FastAPI, Request, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,6 +23,7 @@ from .models import Analysis
 from ..core.settings import Settings
 
 
+DATA = Path(os.path.realpath(__file__)).parent.parent / "data"
 app = FastAPI(title=Settings().project_name, version=Settings().version, description=Settings().fast_api_description)
 
 # FIXME: менять в проде allow_origins на локальные!
@@ -76,5 +79,5 @@ async def load_audio_res(request: Request, audio: UploadFile = File(...)):
 
 @app.get('/graph_generate_gif')
 async def graph_generate_gif_res(request: Request):
-    filename = generate_gif()
-    return FileResponse(filename)
+    # filename = generate_gif()
+    return FileResponse(str(DATA / "animation.gif"))
