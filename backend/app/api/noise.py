@@ -1,12 +1,7 @@
-# from IPython.display import Audio
-from scipy.io import wavfile
-# import scipy.signal
-import numpy as np
 from typing import BinaryIO
 
-
-# import matplotlib.pyplot as plt
-# import librosa
+from scipy.io import wavfile
+import numpy as np
 
 
 def data_to_analyse(data):

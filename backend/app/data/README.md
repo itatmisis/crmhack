@@ -1,2 +1,3 @@
 - Данные для Vosk скачать через download.sh в vosk
 - Данные для берда скачать из https://github.com/vlomme/Bert-Russian-punctuation
+- DocToVec: https://t.me/c/1423525061/933

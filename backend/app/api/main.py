@@ -3,6 +3,7 @@ from io import BytesIO
 
 from fastapi import FastAPI, Request, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from loguru import logger
 import ujson
 from pydantic import BaseModel
@@ -12,13 +13,15 @@ from .noise import rate_noise
 from .bert_pred import berd_predict
 from .bert_sentiment import get_sentiment
 from .text_speed import average_speed
+from .network_evolution_inf import generate_gif
 from .models import Analysis
 
 from ..core.settings import Settings
 
 
 app = FastAPI(title=Settings().project_name, version=Settings().version, description=Settings().fast_api_description)
-# FIX_ME: менять в проде allow_origins на локальные!
+
+# FIXME: менять в проде allow_origins на локальные!
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -65,3 +68,9 @@ async def load_audio_res(request: Request, audio: UploadFile = File(...)):
                  "sentiments": sentiments}
     logger.info("Request done from: {}", request.client.host)
     return to_return
+
+
+@app.get('/graph_generate_gif')
+async def graph_generate_gif_res(request: Request):
+    filename = generate_gif()
+    return FileResponse(filename)
