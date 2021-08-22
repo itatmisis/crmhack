@@ -110,7 +110,7 @@ class DashboardPage extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(13.0)),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 15, 0, 0),
+        padding: const EdgeInsets.all(10),
         child: SizedBox(
           width: 200,
           child: Column(
@@ -120,21 +120,18 @@ class DashboardPage extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               Container(
-                height: 210,
+                height: 200,
                 child: SfCircularChart(
                     annotations: <CircularChartAnnotation>[
                       CircularChartAnnotation(
                           widget: Container(
                               child: Text(doubleToPercent(percent),
                                   style: TextStyle(
-                                      color: favoriteBlueColor, fontSize: 35))))
+                                      color: favoriteBlueColor, fontSize: 30))))
                     ],
                     title: ChartTitle(text: ''),
                     series: <DoughnutSeries<_PieData, String>>[
                       DoughnutSeries<_PieData, String>(
-                          radius: "93%",
-                          // explode: true,
-                          // explodeOffset: '50%',
                           dataSource: <_PieData>[
                             _PieData("asd", percent * 100, ""),
                             _PieData("asd", (1 - percent) * 100, ""),
@@ -245,11 +242,11 @@ class DashboardPage extends StatelessWidget {
           Container(
             height: 300,
             child: SfCartesianChart(
-              legend: Legend(isVisible: true, opacity: 0.7),
+              legend: Legend(
+                  isVisible: true, opacity: 0.7, position: LegendPosition.top),
               title: ChartTitle(text: ''),
               plotAreaBorderWidth: 0,
               primaryXAxis: NumericAxis(
-                title: AxisTitle(text: "Время"),
                 labelFormat: '{value}с',
               ),
               series: getMockChartData(),
