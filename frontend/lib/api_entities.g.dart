@@ -8,7 +8,7 @@ part of 'api_entities.dart';
 
 ProcessAudioResponse _$ProcessAudioResponseFromJson(Map<String, dynamic> json) {
   return ProcessAudioResponse(
-    (json['noise'] as num).toDouble(),
+    Noise.fromJson(json['noise'] as Map<String, dynamic>),
     TextSpeed.fromJson(json['text_speed'] as Map<String, dynamic>),
     RecognizedText.fromJson(json['recognized_text'] as Map<String, dynamic>),
     json['berd_commas'] as String,
@@ -76,10 +76,24 @@ TextSpeed _$TextSpeedFromJson(Map<String, dynamic> json) {
   return TextSpeed(
     (json['mean'] as num).toDouble(),
     json['speed_class'] as String,
+    json['comment'] as String,
   );
 }
 
 Map<String, dynamic> _$TextSpeedToJson(TextSpeed instance) => <String, dynamic>{
       'mean': instance.mean,
       'speed_class': instance.speedClass,
+      'comment': instance.comment,
+    };
+
+Noise _$NoiseFromJson(Map<String, dynamic> json) {
+  return Noise(
+    (json['noise_level'] as num).toDouble(),
+    json['comment'] as String,
+  );
+}
+
+Map<String, dynamic> _$NoiseToJson(Noise instance) => <String, dynamic>{
+      'noise_level': instance.noiseLevel,
+      'comment': instance.comment,
     };

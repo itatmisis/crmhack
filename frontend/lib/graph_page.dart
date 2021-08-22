@@ -9,7 +9,7 @@ class GraphPage extends StatelessWidget {
         title: Text("Граф"),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: ListView(
           children: [
             Image.network(graphGifUrl),

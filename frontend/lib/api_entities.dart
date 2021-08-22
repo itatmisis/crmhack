@@ -4,14 +4,17 @@ part 'api_entities.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class ProcessAudioResponse {
-  final double noise;
+  final Noise noise;
   final TextSpeed textSpeed;
   final RecognizedText recognizedText;
   final String berdCommas;
   final Sentiments sentiments;
 
-  ProcessAudioResponse(this.noise,this.textSpeed, this.recognizedText,this.berdCommas, this.sentiments);
-  factory ProcessAudioResponse.fromJson(Map<String, dynamic> json) => _$ProcessAudioResponseFromJson(json);
+  ProcessAudioResponse(this.noise, this.textSpeed, this.recognizedText,
+      this.berdCommas, this.sentiments);
+
+  factory ProcessAudioResponse.fromJson(Map<String, dynamic> json) =>
+      _$ProcessAudioResponseFromJson(json);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -21,7 +24,8 @@ class RecognizedText {
 
   RecognizedText(this.result, this.text);
 
-  factory RecognizedText.fromJson(Map<String, dynamic> json) => _$RecognizedTextFromJson(json);
+  factory RecognizedText.fromJson(Map<String, dynamic> json) =>
+      _$RecognizedTextFromJson(json);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -40,19 +44,33 @@ class Result {
 class Sentiments {
   String predictedClass;
   List<double>? conf;
+
   // List<List> wordAttributions;
 
   Sentiments(this.predictedClass, this.conf);
 
-  factory Sentiments.fromJson(Map<String, dynamic> json)  => _$SentimentsFromJson(json);
+  factory Sentiments.fromJson(Map<String, dynamic> json) =>
+      _$SentimentsFromJson(json);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class TextSpeed {
   double mean;
   String speedClass;
+  String comment;
 
-  TextSpeed(this.mean, this.speedClass);
+  TextSpeed(this.mean, this.speedClass, this.comment);
 
-  factory TextSpeed.fromJson(Map<String, dynamic> json)  => _$TextSpeedFromJson(json);
+  factory TextSpeed.fromJson(Map<String, dynamic> json) =>
+      _$TextSpeedFromJson(json);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class Noise {
+  double noiseLevel;
+  String comment;
+
+  Noise(this.noiseLevel, this.comment);
+
+  factory Noise.fromJson(Map<String, dynamic> json) => _$NoiseFromJson(json);
 }

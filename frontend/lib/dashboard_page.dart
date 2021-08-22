@@ -39,33 +39,11 @@ class DashboardPage extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
         child: ListView(
           children: [
-            _buildFirstRow(context),
             _buildSecondRow(context),
             _buildThirdRow(context),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildFirstRow(BuildContext context) {
-    return Wrap(
-      alignment: WrapAlignment.spaceBetween,
-      // TODO: use correct icons
-      children: [
-        _buildSimpleMetric(context, Icons.access_time, "Темп речи", this.processedAudio.textSpeed.speedClass,
-            "Необходимо говорить медленнее"),
-        _buildSimpleMetric(context, Icons.handyman_sharp, "Общая вежливость",
-            "75%", "Обратите внимание на тон речи"),
-        _buildSimpleMetric(
-            context,
-            Icons.share_outlined,
-            "Конструктивность диалога",
-            "80%",
-            "Не отвлекайтесь от темы разговора"),
-        _buildSimpleMetric(context, Icons.waves, "Степень зашумленности фона",
-            doubleToPercent(this.processedAudio.noise), "Шум в пределах нормы"),
-      ],
     );
   }
 
@@ -134,7 +112,7 @@ class DashboardPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(15, 15, 0, 0),
         child: SizedBox(
-          width: 300,
+          width: 200,
           child: Column(
             children: [
               Text(
@@ -180,21 +158,41 @@ class DashboardPage extends StatelessWidget {
       alignment: WrapAlignment.spaceBetween,
       direction: Axis.horizontal,
       children: [
-        _buildCircleDiagramMetric(
-            context, "Правильная интонация в разговоре", 0.95),
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
             _buildLineDiagramMetric(
-                context, "Конструктивность в разговоре", 0.4),
-            _buildLineDiagramMetric(
-                context, "Формальность в разговоре       ", 0.8),
+                context, "Общая вежливость               ", 0.75),
+            SizedBox(height: 5),
+            _buildLineDiagramMetric(context, "Формальность в разговоре", 0.8),
           ],
         ),
-        _buildCircleDiagramMetric(context, "Чистота речи в разговоре", 0.2),
         _buildCircleDiagramMetric(context, "Общая оценка разговора", 0.8),
+        _buildCircleDiagramMetric(
+            context, "Правильная интонация в разговоре", 0.95),
+        _buildCircleDiagramMetric(context, "Чистота речи в разговоре", 0.2),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            _buildSimpleMetric(
+                context,
+                Icons.access_time,
+                "Темп речи",
+                this.processedAudio.textSpeed.speedClass,
+                this.processedAudio.textSpeed.comment),
+            SizedBox(height: 15),
+            _buildSimpleMetric(
+                context,
+                Icons.waves,
+                "Степень зашумленности фона",
+                doubleToPercent(this.processedAudio.noise.noiseLevel),
+                this.processedAudio.noise.comment),
+          ],
+        ),
       ],
     );
   }
@@ -206,7 +204,7 @@ class DashboardPage extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(13.0)),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+        padding: const EdgeInsets.all(15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -215,16 +213,12 @@ class DashboardPage extends StatelessWidget {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: favoriteBlueColor,
-                  fontSize: 25),
+                  fontSize: 22),
             ),
             Text(
               title,
               style: TextStyle(fontSize: 20),
             ),
-            Container(
-              width: 210,
-              child: Text(""), // TODO
-            )
           ],
         ),
       ),
@@ -233,7 +227,7 @@ class DashboardPage extends StatelessWidget {
 
   Widget _buildChartMetric(BuildContext context, String title, String body) {
     return SizedBox(
-      width: 450,
+      width: 750,
       child: Column(
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -249,7 +243,7 @@ class DashboardPage extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           ),
           Container(
-            height: 210,
+            height: 300,
             child: SfCartesianChart(
               legend: Legend(isVisible: true, opacity: 0.7),
               title: ChartTitle(text: ''),
