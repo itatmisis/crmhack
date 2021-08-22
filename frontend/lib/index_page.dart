@@ -17,6 +17,7 @@
  */
 
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:frontend/api_entities.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
@@ -25,8 +26,8 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:js/js.dart';
 import 'api.dart';
+import 'audio_util/get_track_url.dart';
 import 'dashboard_page.dart';
 import 'audio_util/temp_file.dart';
 
@@ -194,10 +195,7 @@ class _MainBodyState extends State<MainBody> {
 
   String? _getTrackPath() {
     var trackPath = track.trackPath!;
-    // TODO: fix build for android
-    if (kIsWeb) {
-      trackPath = getRecordURL(trackPath);
-    }
+    trackPath = getRecordURL(trackPath);
     if (trackPath == null || trackPath == "") {
       return null;
     }
@@ -213,10 +211,18 @@ class _MainBodyState extends State<MainBody> {
       ));
       return;
     }
-    final result = await http.get(Uri.parse(trackPath));
-    var data = result.bodyBytes;
+    Uint8List data;
+    if (kIsWeb) {
+      final result = await http.get(Uri.parse(trackPath));
+      data = result.bodyBytes;
+    } else {
+      var f = File(trackPath);
+      data = await f.readAsBytes();
+    }
 
-    showDialog(
+    ProcessAudioResponse? globalResponse;
+
+    var isOk = await showDialog<bool>(
         context: context,
         builder: (context) {
           return SimpleDialog(
@@ -231,12 +237,8 @@ class _MainBodyState extends State<MainBody> {
                         future: processAudio(data.toList()),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      DashboardPage(snapshot.data!)),
-                            );
+                            globalResponse = snapshot.data!;
+                            Navigator.of(context).pop(true);
                             return Text("");
                           } else if (snapshot.hasError) {
                             return Padding(
@@ -266,10 +268,12 @@ class _MainBodyState extends State<MainBody> {
             ],
           );
         });
+
+    if (isOk != null && isOk && globalResponse != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardPage(globalResponse!)),
+      );
+    }
   }
 }
-
-@JS('getRecordURL')
-external String getRecordURL(
-  String path,
-);
