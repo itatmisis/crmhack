@@ -11,8 +11,6 @@ def average_speed(data: dict):
         for i in range(vowels):
             syllables.append(vowels / time)
     mean = np.array(syllables).mean()
-    class_ = ""
-    comment = ""
     if mean < 8.5:
         class_ = "Слишком медленно"
         comment = "Говорите быстрее"

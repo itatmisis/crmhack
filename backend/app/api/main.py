@@ -14,6 +14,7 @@ from .bert_pred import berd_predict
 from .bert_sentiment import get_sentiment
 from .text_speed import average_speed
 from .network_evolution_inf import generate_gif
+from .politness import average_politeness
 from .models import Analysis
 
 from ..core.settings import Settings
@@ -58,12 +59,14 @@ async def load_audio_res(request: Request, audio: UploadFile = File(...)):
     audio_wav.seek(0)
 
     text_speed = average_speed(recognized_text)
+    politness = average_politeness(recognized_text)
+
     noise = rate_noise(audio_wav)
     berd_commas = berd_predict([recognized_text['text']])[0]
     sentiments = get_sentiment(berd_commas)
 
     to_return = {"noise": noise, "text_speed": text_speed, "recognized_text": recognized_text, 'berd_commas': berd_commas,
-                 "sentiments": sentiments}
+                 "sentiments": sentiments, 'politness': politness}
     logger.info("Request done from: {}", request.client.host)
     return to_return
 
