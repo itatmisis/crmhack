@@ -9,6 +9,7 @@ part of 'api_entities.dart';
 ProcessAudioResponse _$ProcessAudioResponseFromJson(Map<String, dynamic> json) {
   return ProcessAudioResponse(
     Noise.fromJson(json['noise'] as Map<String, dynamic>),
+    Politness.fromJson(json['politness'] as Map<String, dynamic>),
     TextSpeed.fromJson(json['text_speed'] as Map<String, dynamic>),
     RecognizedText.fromJson(json['recognized_text'] as Map<String, dynamic>),
     json['berd_commas'] as String,
@@ -20,6 +21,7 @@ Map<String, dynamic> _$ProcessAudioResponseToJson(
         ProcessAudioResponse instance) =>
     <String, dynamic>{
       'noise': instance.noise,
+      'politness': instance.politness,
       'text_speed': instance.textSpeed,
       'recognized_text': instance.recognizedText,
       'berd_commas': instance.berdCommas,
@@ -96,4 +98,22 @@ Noise _$NoiseFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$NoiseToJson(Noise instance) => <String, dynamic>{
       'noise_level': instance.noiseLevel,
       'comment': instance.comment,
+    };
+
+Politness _$PolitnessFromJson(Map<String, dynamic> json) {
+  return Politness(
+    (json['positive'] as num).toDouble(),
+    (json['friendly'] as num).toDouble(),
+    (json['clear'] as num).toDouble(),
+    (json['formal'] as num).toDouble(),
+    (json['average'] as num).toDouble(),
+  );
+}
+
+Map<String, dynamic> _$PolitnessToJson(Politness instance) => <String, dynamic>{
+      'positive': instance.positive,
+      'friendly': instance.friendly,
+      'clear': instance.clear,
+      'formal': instance.formal,
+      'average': instance.average,
     };

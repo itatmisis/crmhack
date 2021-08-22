@@ -90,15 +90,18 @@ class DashboardPage extends StatelessWidget {
   }
 
   Widget _buildSecondRow(BuildContext context) {
+    var benevolence = (this.processedAudio.politness.positive +
+            this.processedAudio.politness.friendly) /
+        2;
     return Wrap(
       alignment: WrapAlignment.spaceBetween,
       children: [
-        _buildCircleDiagramMetric(
-            context, "Позитивная вежливость в разговоре", 0.9),
+        _buildCircleDiagramMetric(context, "Позитивная вежливость в разговоре",
+            this.processedAudio.politness.positive),
         _buildChartMetric(
             context, "Эмоциональная динамика", "Статистика за разговор"),
         _buildCircleDiagramMetric(
-            context, "Доброжелательность в разговоре", 0.5),
+            context, "Доброжелательность в разговоре", benevolence),
       ],
     );
   }
@@ -160,16 +163,20 @@ class DashboardPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            _buildLineDiagramMetric(
-                context, "Общая вежливость               ", 0.75),
+            _buildLineDiagramMetric(context, "Общая вежливость               ",
+                this.processedAudio.politness.friendly),
             SizedBox(height: 5),
-            _buildLineDiagramMetric(context, "Формальность в разговоре", 0.8),
+            _buildLineDiagramMetric(context, "Формальность в разговоре",
+                this.processedAudio.politness.formal),
           ],
         ),
-        _buildCircleDiagramMetric(context, "Общая оценка разговора", 0.8),
+        _buildCircleDiagramMetric(context, "Общая оценка разговора",
+            this.processedAudio.politness.average),
+        // TODO
         _buildCircleDiagramMetric(
             context, "Правильная интонация в разговоре", 0.95),
-        _buildCircleDiagramMetric(context, "Чистота речи в разговоре", 0.2),
+        _buildCircleDiagramMetric(context, "Чистота речи в разговоре",
+            this.processedAudio.politness.clear),
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
