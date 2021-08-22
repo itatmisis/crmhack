@@ -17,6 +17,7 @@
  */
 
 import 'dart:io';
+import 'package:frontend/api_entities.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -112,39 +113,11 @@ class _MainBodyState extends State<MainBody> {
             return Column(
               children: <Widget>[
                 _buildRecorder(track),
-                _buildQR(),
                 ElevatedButton(
                   child: const Text('Go to dashboard page'),
-                  onPressed: () async {
-                    var trackPath = track.trackPath!;
-                    if (kIsWeb) {
-                      trackPath = getRecordURL(trackPath);
-                    }
-                    final result = await http.get(Uri.parse(trackPath));
-                    var data = result.bodyBytes;
-                    if (data == null) {
-                      // TODO
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text("null recorded audio"),
-                      ));
-                      return;
-                    }
-                    var response = await processAudio(data.toList());
-                    if (response == null) {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text("invalid response from server"),
-                      ));
-                      return;
-                    }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => DashboardPage(response)),
-                    );
-                  },
+                  onPressed: _onProcessRecord,
                 ),
+                _buildQR(),
               ],
             );
           }
@@ -187,6 +160,73 @@ class _MainBodyState extends State<MainBody> {
         ),
       ),
     );
+  }
+
+  _onProcessRecord() async {
+    var trackPath = track.trackPath!;
+    if (kIsWeb) {
+      trackPath = getRecordURL(trackPath);
+    }
+    if (trackPath == null || trackPath == "") {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.red,
+        content: Text("null recorded audio"),
+      ));
+      return;
+    }
+    final result = await http.get(Uri.parse(trackPath));
+    var data = result.bodyBytes;
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: Text("Processing audio..."),
+            children: [
+              Center(
+                child: SizedBox(
+                  width: 350,
+                  child: Column(
+                    children: [
+                      FutureBuilder<ProcessAudioResponse>(
+                        future: processAudio(data.toList()),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      DashboardPage(snapshot.data!)),
+                            );
+                            return Text("");
+                          } else if (snapshot.hasError) {
+                            return Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text('Error: ${snapshot.error}'),
+                            );
+                          }
+
+                          return Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: const CircularProgressIndicator(),
+                          );
+                        },
+                      ),
+                      Center(
+                        child: ElevatedButton(
+                          child: Text("Close"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 }
 
