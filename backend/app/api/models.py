@@ -27,7 +27,7 @@ class TextSpeed(BaseModel):
     mean: float
 
 
-class Politness(BaseModel):
+class Politeness(BaseModel):
     positive: float
     friendly: float
     clear: float
@@ -41,8 +41,9 @@ class Noise(BaseModel):
 
 class Analysis(BaseModel):
     noise: Optional[Noise]
-    politness: Optional[Politness]
+    politeness: Optional[Politeness]
     text_speed: Optional[TextSpeed]
     recognized_text: Optional[RecognizedText]
-    berd_commas: Optional[str]
+    bert_commas: Optional[str]
     sentiments: Optional[Sentiment]
+    bert_parted: Optional[List[float]]
