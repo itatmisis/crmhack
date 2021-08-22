@@ -38,7 +38,7 @@ class Result {
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Sentiments {
   String predictedClass;
-  List<double> conf;
+  List<double>? conf;
   // List<List> wordAttributions;
 
   Sentiments(this.predictedClass, this.conf);

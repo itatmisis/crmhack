@@ -102,6 +102,8 @@ class DashboardPage extends StatelessWidget {
       children: [
         _buildCircleDiagramMetric(
             context, "Позитивная вежливость в разговоре", 0.9),
+        _buildChartMetric(
+            context, "Эмоциональная динамика", "Статистика за разговор"),
         _buildCircleDiagramMetric(
             context, "Доброжелательность в разговоре", 0.5),
       ],
@@ -214,6 +216,69 @@ class DashboardPage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildChartMetric(BuildContext context, String title, String body) {
+    return SizedBox(
+      width: 450,
+      child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                color: favoriteBlueColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 18),
+          ),
+          Text(
+            body,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
+          Container(
+            height: 210,
+            child: SfCartesianChart(
+              legend: Legend(isVisible: true, opacity: 0.7),
+              title: ChartTitle(text: ''),
+              plotAreaBorderWidth: 0,
+              primaryXAxis: NumericAxis(
+                title: AxisTitle(text: "Время"),
+                labelFormat: '{value}с',
+              ),
+              series: getMockChartData(),
+              tooltipBehavior: TooltipBehavior(enable: true),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  static List<LineSeries<_ChartData, num>> getMockChartData() {
+    final List<_ChartData> chartData = <_ChartData>[
+      _ChartData(10, 3),
+      _ChartData(15, 2),
+      _ChartData(20, 1),
+      _ChartData(25, 3),
+      _ChartData(30, 3),
+      _ChartData(35, 2),
+      _ChartData(40, 4),
+      _ChartData(45, 2),
+      _ChartData(50, 1),
+    ];
+    return <LineSeries<_ChartData, num>>[
+      LineSeries<_ChartData, num>(
+        // enableToolTip: isTooltipVisible,
+        dataSource: chartData,
+        xValueMapper: (_ChartData data, _) => data.second,
+        yValueMapper: (_ChartData data, _) => data.count,
+        name: "Важный параметр",
+      ),
+    ];
+  }
+}
+
+String doubleToPercent(double val) {
+  return (val * 100).toStringAsFixed(0).toString() + '%';
 }
 
 class _PieData {
@@ -224,6 +289,9 @@ class _PieData {
   final String text;
 }
 
-String doubleToPercent(double val) {
-  return (val * 100).toStringAsFixed(0).toString() + '%';
+class _ChartData {
+  _ChartData(this.second, this.count);
+
+  final double second;
+  final double count;
 }

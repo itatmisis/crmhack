@@ -58,7 +58,9 @@ Map<String, dynamic> _$ResultToJson(Result instance) => <String, dynamic>{
 Sentiments _$SentimentsFromJson(Map<String, dynamic> json) {
   return Sentiments(
     json['predicted_class'] as String,
-    (json['conf'] as List<dynamic>).map((e) => (e as num).toDouble()).toList(),
+    (json['conf'] as List<dynamic>?)
+        ?.map((e) => (e as num).toDouble())
+        .toList(),
   );
 }
 
