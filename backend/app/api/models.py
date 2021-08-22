@@ -21,9 +21,14 @@ class Sentiment(BaseModel):
     word_attributions: Optional[List[List]]
 
 
+class TextSpeed(BaseModel):
+    speed_class: str
+    mean: float
+
+
 class Analysis(BaseModel):
     noise: Optional[float]
-    text_speed: Optional[List[float, str]]
+    text_speed: Optional[TextSpeed]
     recognized_text: Optional[RecognizedText]
     berd_commas: Optional[str]
     sentiments: Optional[Sentiment]

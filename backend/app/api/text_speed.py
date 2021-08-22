@@ -12,10 +12,10 @@ def average_speed(data: dict):
             syllables.append(time / vowels)
     mean = np.array(syllables).mean()
     class_ = ""
-    if mean < 0:
-        class_ = "Медленно"
+    if mean < 2.3:
+        class_ = "Слишком медленно"
     elif mean < 5:
         class_ = "Нормально"
     else:
-        class_ = "Быстро"
-    return mean, class_
+        class_ = "Слишком быстро"
+    return {"mean": mean, "speed_class": class_}
