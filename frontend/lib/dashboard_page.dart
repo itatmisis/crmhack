@@ -29,12 +29,8 @@ class DashboardPage extends StatelessWidget {
   }
 
   Widget _buildFirstRow(BuildContext context) {
-    // TODO: fix row overflow with wrap
-    return Row(
-      // body: Wrap(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      // alignment: WrapAlignment.spaceBetween,
-      // direction: Axis.horizontal,
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
       // TODO: use correct icons
       children: [
         _buildSimpleMetric(context, Icons.access_time, "Темп речи", "Быстро",
@@ -55,50 +51,49 @@ class DashboardPage extends StatelessWidget {
 
   Widget _buildSimpleMetric(BuildContext context, IconData icon, String title,
       String body, String hint) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Icon(
-              icon,
-              color: favoriteBlueColor,
-            )),
-        Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(children: [
-              Text(title),
-              Icon(
-                Icons.arrow_drop_down,
+    return SizedBox(
+      width: 300,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Icon(
+                icon,
                 color: favoriteBlueColor,
-              )
-            ]),
-            Text(
-              body,
-              style: TextStyle(
+              )),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(children: [
+                Text(title),
+                Icon(
+                  Icons.arrow_drop_down,
                   color: favoriteBlueColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25),
-              // textAlign: TextAlign.left,
-            ),
-            Text(
-              hint,
-              style: TextStyle(color: Colors.grey, fontSize: 10),
-              // textAlign: TextAlign.left,
-            ),
-          ],
-        )
-      ],
+                )
+              ]),
+              Text(
+                body,
+                style: TextStyle(
+                    color: favoriteBlueColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25),
+              ),
+              Text(
+                hint,
+                style: TextStyle(color: Colors.grey, fontSize: 10),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 
   Widget _buildSecondRow(BuildContext context) {
-    // TODO: fix row overflow with wrap
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
       children: [
         _buildCircleDiagramMetric(
             context, "Позитивная вежливость в разговоре", 0.9),
@@ -117,7 +112,7 @@ class DashboardPage extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(13.0)),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+        padding: const EdgeInsets.fromLTRB(15, 15, 0, 0),
         child: SizedBox(
           width: 300,
           child: Column(
@@ -139,7 +134,7 @@ class DashboardPage extends StatelessWidget {
                     title: ChartTitle(text: ''),
                     series: <DoughnutSeries<_PieData, String>>[
                       DoughnutSeries<_PieData, String>(
-                          radius: "95%",
+                          radius: "93%",
                           // explode: true,
                           // explodeOffset: '50%',
                           dataSource: <_PieData>[
@@ -161,10 +156,9 @@ class DashboardPage extends StatelessWidget {
   }
 
   Widget _buildThirdRow(BuildContext context) {
-    // TODO: fix row overflow with wrap
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      direction: Axis.horizontal,
       children: [
         _buildCircleDiagramMetric(
             context, "Правильная интонация в разговоре", 0.95),
