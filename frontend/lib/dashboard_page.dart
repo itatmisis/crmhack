@@ -30,6 +30,32 @@ class DashboardPage extends StatelessWidget {
                       ));
                 },
               ),
+              SizedBox(
+                width: 10,
+              ),
+              ElevatedButton.icon(
+                icon: Icon(Icons.open_in_new),
+                label: Text('Open II graph page'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GraphPageTwo(),
+                      ));
+                },
+              ),
+              SizedBox(width: 10),
+              ElevatedButton.icon(
+                icon: Icon(Icons.open_in_new),
+                label: Text('Open III graph page'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GraphPageThree(),
+                      ));
+                },
+              ),
               SizedBox(width: 100),
             ],
           )
